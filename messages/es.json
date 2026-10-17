@@ -2152,6 +2152,15 @@
     "importDuplicates": "Duplicadas",
     "importPreviewHint": "Las filas con errores o SKU duplicados se omitirán.",
     "importFailed": "Falló la importación de productos.",
+    "importParsing": "Procesando archivo…",
+    "parse": {
+      "fileTooLarge": "El archivo supera el límite de 5 MB.",
+      "csvParseError": "No se pudo procesar el archivo CSV.",
+      "xlsxEmpty": "El archivo de Excel no contiene hojas.",
+      "xlsxNoRows": "La hoja de Excel no contiene filas de datos.",
+      "xlsxParseError": "No se pudo procesar el archivo de Excel.",
+      "unsupportedFileType": "Formato de archivo no compatible. Sube un archivo .csv, .xlsx o .xls."
+    },
     "searchProducts": "Buscar productos…",
     "searchProductsAria": "Buscar productos",
     "allCategories": "Todas las categorías",

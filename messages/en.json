@@ -2152,6 +2152,15 @@
     "importDuplicates": "Duplicates",
     "importPreviewHint": "Rows with validation errors or duplicate SKUs will be skipped.",
     "importFailed": "Product import failed.",
+    "importParsing": "Parsing spreadsheet…",
+    "parse": {
+      "fileTooLarge": "File size exceeds the 5 MB limit.",
+      "csvParseError": "Could not parse CSV file.",
+      "xlsxEmpty": "Excel workbook has no sheets.",
+      "xlsxNoRows": "Excel sheet does not contain any data rows.",
+      "xlsxParseError": "Could not parse Excel workbook.",
+      "unsupportedFileType": "Unsupported file format. Please upload a .csv, .xlsx, or .xls file."
+    },
     "searchProducts": "Search products…",
     "searchProductsAria": "Search products",
     "allCategories": "All categories",
