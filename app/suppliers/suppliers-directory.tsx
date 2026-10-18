@@ -107,12 +107,17 @@ export default function SuppliersDirectory({ initialSuppliers }: SuppliersDirect
         {/* Filters */}
         <div className="mb-6 space-y-4">
           {/* Category pills */}
-          <div className="flex flex-wrap gap-2">
+          <div
+            className="flex flex-wrap gap-2"
+            role="group"
+            aria-label={t('suppliersPage.categoryGroupAria')}
+          >
             {FILTER_CATEGORY_VALUES.map((cat) => (
               <button
                 key={cat}
                 type="button"
                 onClick={() => setSelectedCategory(cat)}
+                aria-pressed={selectedCategory === cat}
                 className={`inline-flex items-center rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
                   selectedCategory === cat
                     ? 'bg-foreground text-background'
@@ -132,7 +137,9 @@ export default function SuppliersDirectory({ initialSuppliers }: SuppliersDirect
                 aria-hidden
               />
               <Input
+                type="search"
                 placeholder={t('suppliersPage.searchPlaceholder')}
+                aria-label={t('suppliersPage.searchAria')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
@@ -231,8 +238,14 @@ export default function SuppliersDirectory({ initialSuppliers }: SuppliersDirect
           </div>
         )}
 
-        {/* Result count */}
-        <p className="mb-4 text-sm text-muted-foreground">
+        {/* Result count — polite live region announces the new total
+            after a filter settles, not on every keystroke. */}
+        <p
+          className="mb-4 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           {filteredSuppliers.length}{' '}
           {filteredSuppliers.length === 1
             ? t('suppliersPage.supplierOne')

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Navigation } from '@/components/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -92,6 +92,18 @@ export function InvestorsList({ initialInvestors }: { initialInvestors: Investor
 
   const hasActiveFilters = searchQuery || selectedCountry !== 'all' || selectedSector !== 'all'
 
+  // Debounce the live-region count so a screen reader hears one settled
+  // announcement per filter change instead of one per keystroke.
+  const [announceCount, setAnnounceCount] = useState(filtered.length)
+  useEffect(() => {
+    const id = setTimeout(() => setAnnounceCount(filtered.length), 300)
+    return () => clearTimeout(id)
+  }, [filtered.length])
+  const announceText =
+    announceCount === 1
+      ? t('investorsPage.foundOne', { count: announceCount })
+      : t('investorsPage.foundMany', { count: announceCount })
+
   return (
     <div className="flex min-h-screen flex-col">
       <Navigation />
@@ -142,7 +154,9 @@ export function InvestorsList({ initialInvestors }: { initialInvestors: Investor
           </div>
         </div>
 
-        {/* Result count */}
+        {/* Result count — visible count updates per keystroke for sighted
+            users; a sibling sr-only live region announces the debounced
+            settled count so screen readers aren't spammed. */}
         <div className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
           <TrendingUp className="h-4 w-4" aria-hidden />
           <span>
@@ -152,6 +166,9 @@ export function InvestorsList({ initialInvestors }: { initialInvestors: Investor
             {hasActiveFilters && t('investorsPage.matchingFilters')}
           </span>
         </div>
+        <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+          {announceText}
+        </span>
 
         {/* Grid */}
         {filtered.length === 0 ? (
