@@ -3360,5 +3360,15 @@
       "feeWarning": "Fee warning",
       "networkWarning": "Network warning"
     }
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred while loading this section.",
+    "retry": "Try again",
+    "dashboardTitle": "Unable to load dashboard",
+    "dashboardDescription": "The dashboard data could not be loaded. Please try again.",
+    "directoryTitle": "Unable to load directory",
+    "directoryDescription": "The directory listings could not be loaded. Please try again.",
+    "diagnosticLabel": "Error reference"
   }
 }
