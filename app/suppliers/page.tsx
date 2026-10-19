@@ -1,4 +1,4 @@
-import { fetchPublicSuppliers } from '@/lib/suppliers/directory'
+import { fetchPublicSuppliers } from '-@/lib/suppliers/directory'
 import SuppliersDirectory from './suppliers-directory'
 import { JsonLd } from '@/components/seo/json-ld'
 
