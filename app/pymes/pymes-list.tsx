@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -107,6 +107,18 @@ export function PymesList({ initialSmbs }: { initialSmbs: Smb[] }) {
 
   const hasActiveFilters = searchQuery || selectedCountry !== 'all' || selectedSector !== 'all'
 
+  // Debounce the live-region count so a screen reader hears one settled
+  // announcement per filter change instead of one per keystroke.
+  const [announceCount, setAnnounceCount] = useState(filteredSmbs.length)
+  useEffect(() => {
+    const id = setTimeout(() => setAnnounceCount(filteredSmbs.length), 300)
+    return () => clearTimeout(id)
+  }, [filteredSmbs.length])
+  const announceText =
+    announceCount === 1
+      ? t('pymesPage.foundOne', { count: announceCount })
+      : t('pymesPage.foundMany', { count: announceCount })
+
   return (
     <>
       {/* Filters */}
@@ -152,7 +164,9 @@ export function PymesList({ initialSmbs }: { initialSmbs: Smb[] }) {
           </div>
         </div>
 
-        {/* Result count */}
+        {/* Result count — visible count updates per keystroke for sighted
+            users; a sibling sr-only live region announces the debounced
+            settled count so screen readers aren't spammed. */}
         <div className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
           <Store className="h-4 w-4" aria-hidden />
           <span>
@@ -162,6 +176,9 @@ export function PymesList({ initialSmbs }: { initialSmbs: Smb[] }) {
             {hasActiveFilters && t('pymesPage.matchingFilters')}
           </span>
         </div>
+        <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+          {announceText}
+        </span>
 
         {/* Grid */}
         {filteredSmbs.length === 0 ? (
