@@ -3372,5 +3372,15 @@
       "feeWarning": "Advertencia de comisión",
       "networkWarning": "Advertencia de red"
     }
+  },
+  "errorBoundary": {
+    "title": "Algo salió mal",
+    "description": "Ocurrió un error inesperado al cargar esta sección.",
+    "retry": "Intentar de nuevo",
+    "dashboardTitle": "No se pudo cargar el panel",
+    "dashboardDescription": "No se pudieron cargar los datos del panel. Por favor intenta de nuevo.",
+    "directoryTitle": "No se pudo cargar el directorio",
+    "directoryDescription": "No se pudieron cargar los listados del directorio. Por favor intenta de nuevo.",
+    "diagnosticLabel": "Referencia del error"
   }
 }
