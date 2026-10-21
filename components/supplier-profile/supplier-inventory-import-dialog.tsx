@@ -44,6 +44,7 @@ export function SupplierInventoryImportDialog({
   const [error, setError] = useState('')
   const [isParsing, setIsParsing] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
+  const [isParsing, setIsParsing] = useState(false)
 
   useEffect(() => {
     return () => {
@@ -61,11 +62,28 @@ export function SupplierInventoryImportDialog({
       setError('')
       if (inputRef.current) inputRef.current.value = ''
     }
+  }, [])
+
+  // Invalidate any in-flight parse when the import target context changes.
+  useEffect(() => {
+    generationRef.current += 1
+    setRows([])
+    setFileName('')
+    setError('')
+    setIsParsing(false)
+    if (inputRef.current) inputRef.current.value = ''
+  }, [products])
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) invalidate()
     onOpenChange(nextOpen)
   }
 
   const handleFile = async (file: File | undefined) => {
     if (!file) return
+    const generation = generationRef.current + 1
+    generationRef.current = generation
+    const targetProducts = productsRef.current
     setError('')
     setRows([])
     setFileName(file.name)
@@ -103,19 +121,24 @@ export function SupplierInventoryImportDialog({
   const handleImport = async () => {
     const importable = rows.flatMap((row) => (row.importable && row.product ? [row.product] : []))
     if (importable.length === 0) return
+    const generation = generationRef.current
+    const targetProducts = productsRef.current
     setIsImporting(true)
     try {
-      if (await onImport(importable)) onOpenChange(false)
+      const success = await onImport(importable)
+      if (!mountedRef.current || generation !== generationRef.current) return
+      if (success && productsRef.current === targetProducts) handleOpenChange(false)
     } catch (importError) {
+      if (!mountedRef.current || generation !== generationRef.current) return
       setError(importError instanceof Error ? importError.message : t('supplierProfile.importFailed'))
     } finally {
-      setIsImporting(false)
+      if (mountedRef.current && generation === generationRef.current) setIsImporting(false)
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="sm:max-xl">
         <DialogHeader>
           <DialogTitle>{t('supplierProfile.importTitle')}</DialogTitle>
           <DialogDescription>{t('supplierProfile.importDescription')}</DialogDescription>
@@ -148,6 +171,13 @@ export function SupplierInventoryImportDialog({
             </span>
             <span className="mt-1 text-xs text-muted-foreground">{t('supplierProfile.importFileHint')}</span>
           </button>
+
+          {isParsing && (
+            <p className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="h-w-4 w-4 animate-spin" aria-hidden />
+              {t('supplierProfile.importParsing')}
+            </p>
+          )}
 
           {error && <p className="text-sm text-destructive">{error}</p>}
 
