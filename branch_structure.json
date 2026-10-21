@@ -1,0 +1,18 @@
+{
+  "default_branch": "develop",
+  "branches": [
+    "develop",
+    "feat/issue-236-perf-directories-bound-public-directory-queries",
+    "origin"
+  ],
+  "parent": {
+    "develop": null,
+    "feat/issue-236-perf-directories-bound-public-directory-queries": "develop",
+    "origin": "develop"
+  },
+  "order": [
+    "develop",
+    "feat/issue-236-perf-directories-bound-public-directory-queries",
+    "origin"
+  ]
+}
